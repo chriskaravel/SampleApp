@@ -1,0 +1,42 @@
+node {
+    def IMAGE_NAME = "sampleapp"
+    def IMAGE_TAG = "${BUILD_NUMBER}"
+    def DOCKERHUB_USER = "chriskaravel"
+
+    stage('Checkout') {
+        git branch: 'master', url: 'https://github.com/chriskaravel/SampleApp.git'
+    }
+
+    stage('Restore') {
+        sh 'dotnet restore'
+    }
+
+    stage('Build') {
+        sh 'dotnet build -c Release'
+    }
+
+    stage('Publish') {
+        sh 'dotnet publish -c Release -o publish'
+    }
+
+    stage('Docker Build') {
+        sh """
+          docker build -t ${DOCKERHUB_USER}/${IMAGE_NAME}:${IMAGE_TAG} .
+        """
+    }
+
+    stage('Docker Login & Push') {
+        withCredentials([usernamePassword(
+            credentialsId: 'a7318a6d-f4c9-4823-b04b-c127bee9d32e',
+            usernameVariable: 'USER',
+            passwordVariable: 'PASS'
+        )]) {
+
+            sh """
+              echo "$PASS" | docker login -u "$USER" --password-stdin
+
+              docker push ${DOCKERHUB_USER}/${IMAGE_NAME}:${IMAGE_TAG}
+            """
+        }
+    }
+}
