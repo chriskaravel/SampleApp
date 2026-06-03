@@ -39,9 +39,9 @@ node {
             """
         }
     }
-        stage('Deploy to minikube') {
+    stage('Deploy to minikube') {
         sh """
-          kubectl set image deployment/sampleapp=${DOCKERHUB_USER}/${IMAGE_NAME}:${IMAGE_TAG}
+          kubectl set image deployment/sampleapp sampleapp=${DOCKERHUB_USER}/${IMAGE_NAME}:${IMAGE_TAG}
         """
     }
 }
