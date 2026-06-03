@@ -27,7 +27,7 @@ node {
 
     stage('Docker Login & Push') {
         withCredentials([usernamePassword(
-            credentialsId: 'a7318a6d-f4c9-4823-b04b-c127bee9d32e',
+            credentialsId: '67d62f6c-0658-403c-8d1b-6f43ed4aa934',
             usernameVariable: 'USER',
             passwordVariable: 'PASS'
         )]) {
