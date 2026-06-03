@@ -41,6 +41,8 @@ node {
     }
     stage('Deploy to minikube') {
         sh """
+          export KUBECONFIG=/var/jenkins_home/.kube/config
+          kubectl get nodes
           kubectl set image deployment/sampleapp sampleapp=${DOCKERHUB_USER}/${IMAGE_NAME}:${IMAGE_TAG}
         """
     }
